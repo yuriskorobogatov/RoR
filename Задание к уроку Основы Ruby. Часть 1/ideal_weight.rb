@@ -2,16 +2,12 @@ print "What's your name?"
 name = gets.chomp
 
 print "How tall are you?"
-tall = Integer(gets.chomp)
+tall = gets.chomp.to_i
 
+ideal=tall - 110
 
-
-if (tall - 110 < 0)
-
+if ideal < 0
   puts "Your weight,mr/ms #{name} is already optimal"
-
 else
-
-  puts "#{name}, your weight is #{tall-110}"
-
+  puts "#{name}, your weight is #{ideal}"
 end
