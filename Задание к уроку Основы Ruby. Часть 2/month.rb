@@ -1,16 +1,16 @@
 month=
     {
-      "Ja"  => 31,
-      "Fe"  => 28,
-      "Ma"  => 31,
-      "Ap"  => 30,
+      "January"  => 31,
+      "February"  => 28,
+      "March"  => 31,
+      "April"  => 30,
       "May"  => 31,
-      "Ju"  => 30,
-      "Jul"  => 31,
-      "Aug"  => 31,
-      "Sep"  => 30,
-      "Oct"  => 31,
-      "Nov"  => 30,
-      "Dec" => 31
+      "June"  => 30,
+      "July"  => 31,
+      "August"  => 31,
+      "September"  => 30,
+      "October"  => 31,
+      "November"  => 30,
+      "December" => 31
     }
-month.each {|k, v| puts  k if v == 30}
+month.each { |name, days| puts  name if days == 30 }

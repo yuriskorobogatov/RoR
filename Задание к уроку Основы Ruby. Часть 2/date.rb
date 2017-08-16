@@ -1,10 +1,9 @@
-def date
   puts "Число?"
-  day = gets.chomp.to_i
+  day = gets.to_i
   puts "Месяц?"
-  month = gets.chomp.to_i
+  month = gets.to_i
   puts "Год?"
-  year = gets.chomp.to_i
+  year = gets.to_i
 
   month_array = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   if year % 4 == 0 && year % 100 !=0 || year % 400 == 0
@@ -22,5 +21,3 @@ def date
   n+= day
 
   puts "С начала года #{day + n} дней"
-end
-date
