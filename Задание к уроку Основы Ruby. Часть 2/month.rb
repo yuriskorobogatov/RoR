@@ -1,5 +1,4 @@
-month=
-    {
+month={
       "January"  => 31,
       "February"  => 28,
       "March"  => 31,

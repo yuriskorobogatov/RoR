@@ -1,23 +1,24 @@
-  puts "Число?"
-  day = gets.to_i
-  puts "Месяц?"
-  month = gets.to_i
-  puts "Год?"
-  year = gets.to_i
 
-  month_array = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  puts "Введите число месяца"
+  day = gets.chomp.to_i
+
+  puts "Введите месяц"
+  month = gets.chomp.to_i
+
+  puts "Введите год"
+  year = gets.chomp.to_i
+
+  month_arr = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   if year % 4 == 0 && year % 100 !=0 || year % 400 == 0
-    month_array[1] = 29
+    month_arr[1] = 29
   end
 
-  n = 0
-  x = 0
-
-  while x < month
-    n += month_array[x]
-    x += 1
+  counter = 1
+  while counter < month do
+    date += month_arr[counter - 1]
+    counter += 1
   end
+  puts "C начала года #{day + counter -1} дней"
 
-  n+= day
 
-  puts "С начала года #{day + n} дней"
+
