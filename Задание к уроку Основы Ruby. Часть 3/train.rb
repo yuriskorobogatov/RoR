@@ -11,7 +11,7 @@ class Station
   end
 
   def trains_by_type(type)
-    trains.select{|train| train.type == type}
+    trains.select{ |train| train.type == type }
   end
 
   def depart_train(train)
@@ -20,7 +20,7 @@ class Station
 end
 
 class Route
-  attr_reader :stations
+  attr_accessor :stations
 
   def initialize(first_station,lats_station)
     @stations = [first_station, lats_station]
@@ -46,7 +46,7 @@ class Train
     @number_wagons = number_wagons.to_i
   end
 
-  def stations(index)
+  def station_at(index)
     @route.station[index]
   end
 
@@ -97,13 +97,13 @@ class Train
     @station_index += 1
     current_station.add_train(self)
   end
-  
+
   def next_station
     @route.station[@station_index + 1]
   end
 
   def prev_station
-    @route.station[@station_index - 1] if @station_index > 0
+    station(@station_index - 1) if prev_station?
   end
 
 end
