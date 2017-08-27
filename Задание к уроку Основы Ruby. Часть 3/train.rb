@@ -10,10 +10,9 @@ class Station
     @trains << train
   end
 
-  def trains_by_type
-    trains.select{|k| k.type}
+  def trains_by_type(type)
+    trains.select{|train| train.type== type}
   end
-
 
   def depart_train(train)
     trains.delete(train)
@@ -21,19 +20,18 @@ class Station
 end
 
 class Route
-  attr_accessor :first_station, :lats_station
   attr_reader :stations
 
   def initialize(first_station,lats_station)
     @stations = [first_station, lats_station]
-      end
-
-  def add_station(new_station)
-    @stations << new_station
   end
 
-  def delete_station(new_station)
-    @stations.delete(new_station)
+  def add_station(station)
+    @stations.insert(- 2, station)
+  end
+
+  def delete_station(station)
+    @stations.delete(station)
   end
 end
 
@@ -46,6 +44,10 @@ class Train
     @speed = 0
     @type = type
     @number_wagons = number_wagons.to_i
+  end
+
+  def station(index)
+    @route.station[index]
   end
 
   def accelerate
@@ -66,12 +68,12 @@ class Train
     @station_index = 0
   end
 
-  def add_train(n)
+  def add_wagons(n)
     @number_wagons = @number_wagons + n if speed==0
   end
 
-  def remove_train(n)
-    @number_wagons = @number_wagons - n if speed==0
+  def remove_wagons(n)
+    @number_wagons = @number_wagons - n if speed==0 && n < @number_wagons
   end
 
   def next_station?
@@ -95,7 +97,6 @@ class Train
     @station_index += 1
     current_station.add_train(self)
   end
-
   
   def next_station
     @route.station[@station_index + 1]
@@ -105,7 +106,4 @@ class Train
     @route.station[@station_index - 1] if @station_index > 0
   end
 
-  def station(index)
-    @route.station[index]
-  end
 end
