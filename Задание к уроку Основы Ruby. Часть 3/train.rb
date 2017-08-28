@@ -37,17 +37,14 @@ end
 
 
 class Train
-  attr_accessor :number_wagons, :speed, :type
+  attr_accessor :number_wagons, :speed, :type, :route
 
   def initialize(number, type, number_wagons)
     @number = number
     @speed = 0
     @type = type
     @number_wagons = number_wagons.to_i
-  end
-
-  def station_at(index)
-    @route.station[index]
+    @station_index = 0
   end
 
   def accelerate
@@ -58,22 +55,32 @@ class Train
     @speed = 0
   end
 
-  def current_station
-    station(@station_index)
-  end
-
-  def assign_route(route)
-    @route = route
-    @route.current_station.add_train(self)
-    @station_index = 0
-  end
-
   def add_wagons(n)
     @number_wagons += n if speed==0
   end
 
   def remove_wagons(n)
     @number_wagons -= n if speed==0 && n < @number_wagons
+  end
+
+  def assign_route(route)
+    @route = route
+    @station_index = 0
+    current_station.add_train(self)
+  end
+
+  def move_back
+    return unless prev_station?
+    current_station.depart_train(self)
+    @station_index -= 1
+    current_station.add_train(self)
+  end
+
+  def move_next
+    return unless next_station?
+    current_station.depart_train(self)
+    @station_index += 1
+    current_station.add_train(self)
   end
 
   def next_station?
@@ -84,26 +91,19 @@ class Train
     @station_index > 0
   end
 
-  def move_back
-    return unless prev_station?
-    current_station.remove_train(self)
-    @station_index -= 1
-    current_station.add_train(self)
-  end
-
-  def move_next
-    return unless next_station?
-    current_station.remove_train(self)
-    @station_index += 1
-    current_station.add_train(self)
-  end
-
   def next_station
-    @route.station[@station_index + 1]
+    station_at(@station_index + 1)
+  end
+
+  def current_station
+    station_at(@station_index)
   end
 
   def prev_station
-    station(@station_index - 1) if prev_station?
+    station_at(@station_index - 1)
   end
 
+  def station_at(index)
+    @route.stations[index] if index > 0
+  end
 end
