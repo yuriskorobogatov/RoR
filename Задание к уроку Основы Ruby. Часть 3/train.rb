@@ -10,40 +10,39 @@ class Station
     @trains << train
   end
 
-  def trains_by_type(type)
-    trains.select{ |train| train.type == type }
-  end
-
   def depart_train(train)
     trains.delete(train)
+  end
+
+  def trains_by_type(type)
+    trains.select { |train|  train.type == type }
   end
 end
 
 class Route
   attr_accessor :stations
 
-  def initialize(first_station,lats_station)
-    @stations = [first_station, lats_station]
+  def initialize (first_station, last_station)
+    @stations = [first_station, last_station]
   end
 
-  def add_station(station)
-    @stations.insert(- 2, station)
+  def add_station (station)
+    @stations.insert(-2, station)
   end
 
-  def delete_station(station)
-    @stations.delete(station)
+  def delete_station (station)
+    @stations.delete(station) if station != @stations[0] && station != @stations[-1]
   end
 end
 
-
 class Train
-  attr_accessor :number_wagons, :speed, :type, :route
+  attr_accessor  :number_wagons, :speed, :type
 
   def initialize(number, type, number_wagons)
     @number = number
     @speed = 0
-    @type = type
-    @number_wagons = number_wagons.to_i
+    @type =  type
+    @number_wagons = number_wagons
     @station_index = 0
   end
 
@@ -55,12 +54,12 @@ class Train
     @speed = 0
   end
 
-  def add_wagons(n)
-    @number_wagons += n if speed==0
+  def add_wagons
+    @number_wagons += 1 if @speed == 0
   end
 
-  def remove_wagons(n)
-    @number_wagons -= n if speed==0 && n < @number_wagons
+  def remove_wagons
+    @number_wagons -= 1 if @speed == 0 && @number_wagons > 0
   end
 
   def assign_route(route)
@@ -92,18 +91,21 @@ class Train
   end
 
   def next_station
-    station_at(@station_index + 1)
+    @route.stations[@station_index + 1]
   end
 
   def current_station
-    station_at(@station_index)
+    @route.stations[@station_index]
   end
 
   def prev_station
-    station_at(@station_index - 1)
-  end
-
-  def station_at(index)
-    @route.stations[index] if index > 0
+    @route.stations[@station_index - 1] if @station_index > 0
   end
 end
+
+st1 = Station.new('Москва')
+st2 = Station.new('Пермь')
+route = Route.new(st1, st2)
+train = Train.new(1, :passenger, 10)
+train.assign_route(route)
+puts train.prev_station
