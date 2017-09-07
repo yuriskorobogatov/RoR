@@ -4,7 +4,7 @@ class Train
   def initialize(number)
     @number = number
     @speed = 0
-    @number_wagons = []
+    @wagons = []
     @station_index = 0
   end
 
@@ -16,12 +16,13 @@ class Train
     @speed = 0
   end
 
-  def add_wagons
-    @number_wagons << wagon if @speed.zero? && self.type == wagon.type
-  end
+
+  def add_wagon(wagon)
+    @wagons << wagon if @speed.zero? && self.type == wagon.type
+      end
 
   def remove_wagons
-    @number_wagons -= 1 if @speed == 0 && @number_wagons > 0
+    @wagons.pop if @speed.zero?
   end
 
   def assign_route(route)
@@ -44,12 +45,10 @@ class Train
     current_station.add_train(self)
   end
 
-=begin
-    Выделил эти методы по принципу:
-    Пользователь не должен менять маршрут следующей или предидущей станции, да бы не ненарушить  построеный маршрут.
-    Знать текущую станцию не обязательно для передвежения поезда по маршруту
-=end
-
+  protected
+    #Выделил эти методы по принципу:
+    #Пользователь не должен менять маршрут следующей или предидущей станции, да бы не ненарушить  построеный маршрут.
+    #Знать текущую станцию не обязательно для передвежения поезда по маршруту
 
   def next_station?
     @station_index < @route.station.length
@@ -71,3 +70,4 @@ class Train
     @route.stations[@station_index - 1] if @station_index > 0
   end
 end
+

@@ -16,8 +16,8 @@ class Main
     @routes = []
   end
 
-  def start
-    loop do
+   def start
+        loop do
       puts "Выберите действие:
         1 - Создать станцию
         2 - Создать поезд
@@ -60,7 +60,7 @@ class Main
         when 6
           train = choose_train
           route = choose_route
-          train.assign_route = route
+          train.assign_route(route)
 
         when 7
           train = choose_train
@@ -94,6 +94,8 @@ class Main
       end
     end
   end
+
+  protected
 
   def create_station
     puts "Введите название станции: "
@@ -138,7 +140,7 @@ class Main
 
   def choose_train
     number = input_number_of_train
-    @trains.find{ |train| train.number == number }
+    @trains.find { |train| train.number == number }
   end
 
   def input_type_of_train
