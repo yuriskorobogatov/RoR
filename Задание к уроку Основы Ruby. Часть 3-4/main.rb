@@ -51,6 +51,44 @@ class Main
           station = choose_station
           route = choose_route
           route.add_station(station)
+
+        when 5
+          station = choose_station
+          route = choose_route
+          route.delete_station(station)
+
+        when 6
+          train = choose_train
+          route = choose_route
+          train.assign_route = route
+
+        when 7
+          train = choose_train
+          if train.class == PassengerTrain
+            wagon = create_passenger_carriage
+          else
+            wagon = create_cargo_carriage
+          end
+          train.add_wagons(wagon)
+
+        when 8
+          train = choose_train
+          train.remove_wagons
+
+        when 9
+          train = choose_train
+          train.move_next
+
+        when 10
+          train = choose_train
+          train.move_back
+
+        when 11
+          @stations.each { |station| puts station.name }
+
+        when 12
+          station = choose_station
+          puts station.train
         else
           puts "Введите число от 0 до 12"
       end
@@ -100,7 +138,7 @@ class Main
 
   def choose_train
     number = input_number_of_train
-    @trains.find { |train| train.number == number }
+    @trains.find{ |train| train.number == number }
   end
 
   def input_type_of_train
@@ -132,6 +170,7 @@ class Main
   def create_cargo_wagons
     wagons = CargoCarriage.new
   end
+
 end
 Main.new.start
 
