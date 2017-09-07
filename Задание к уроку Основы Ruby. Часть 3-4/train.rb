@@ -16,6 +16,7 @@ class Train
     @speed = 0
   end
 
+  protected
 
   def add_wagon(wagon)
     @wagons << wagon if @speed.zero? && self.type == wagon.type
