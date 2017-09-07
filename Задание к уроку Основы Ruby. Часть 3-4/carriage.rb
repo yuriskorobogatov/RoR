@@ -1,3 +1,3 @@
 class Carriage
-  attr_accessor :type
+  attr_reader :type
 end

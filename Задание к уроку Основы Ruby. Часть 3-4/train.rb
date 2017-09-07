@@ -4,7 +4,7 @@ class Train
   def initialize(number)
     @number = number
     @speed = 0
-    @number_wagons = 0
+    @number_wagons = []
     @station_index = 0
   end
 
@@ -17,7 +17,7 @@ class Train
   end
 
   def add_wagons
-    @number_wagons += 1 if @speed == 0
+    @number_wagons << wagon if @speed.zero? && self.type == wagon.type
   end
 
   def remove_wagons

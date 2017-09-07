@@ -51,8 +51,6 @@ class Main
           station = choose_station
           route = choose_route
           route.add_station(station)
-
-
         else
           puts "Введите число от 0 до 12"
       end
@@ -114,9 +112,9 @@ class Main
 
   def create_route
     puts "Начальная станция: "
-    start = choose_station
+    first_station = choose_station
     puts "Конечная станция: "
-    finish = choose_station
+    last_station = choose_station
     route = Route.new(first_station, last_station)
     @routes << route
   end
