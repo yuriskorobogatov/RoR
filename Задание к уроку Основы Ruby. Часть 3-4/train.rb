@@ -16,11 +16,9 @@ class Train
     @speed = 0
   end
 
-  protected
-
   def add_wagon(wagon)
     @wagons << wagon if @speed.zero? && self.type == wagon.type
-      end
+  end
 
   def remove_wagons
     @wagons.pop if @speed.zero?
@@ -46,19 +44,6 @@ class Train
     current_station.add_train(self)
   end
 
-  protected
-    #Выделил эти методы по принципу:
-    #Пользователь не должен менять маршрут следующей или предидущей станции, да бы не ненарушить  построеный маршрут.
-    #Знать текущую станцию не обязательно для передвежения поезда по маршруту
-
-  def next_station?
-    @station_index < @route.station.length
-  end
-
-  def prev_station?
-    @station_index > 0
-  end
-
   def next_station
     @route.stations[@station_index + 1]
   end
@@ -70,5 +55,19 @@ class Train
   def prev_station
     @route.stations[@station_index - 1] if @station_index > 0
   end
+
+  protected
+    #Выделил эти методы по принципу:
+    #Пользователь не должен менять маршрут следующей или предидущей станции, да бы не ненарушить  построеный маршрут.
+    #Знать текущую станцию не обязательно для передвижения поезда по маршруту
+    #Так посоветовал куратор
+  def next_station?
+    @station_index < @route.station.length
+  end
+
+  def prev_station?
+    @station_index > 0
+  end
+
 end
 

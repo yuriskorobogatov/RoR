@@ -16,7 +16,7 @@ class Main
     @routes = []
   end
 
-   def start
+  def start
         loop do
       puts "Выберите действие:
         1 - Создать станцию
