@@ -48,21 +48,34 @@ class Main
           create_route
 
         when 4
+          if @stations.size>0 && @routes.size>0
           station = choose_station
           route = choose_route
           route.add_station(station)
+          else puts "Станция и маршрут еще не созданы, сначала создайте станцию и Ымаршрут!"
+          return start
+          end
 
         when 5
+          if @stations.size>0 && @routes.size>0
           station = choose_station
           route = choose_route
           route.delete_station(station)
+          else puts "Станция и маршрут еще не созданы, сначала создайте станцию и маршрут!"
+          return start
+          end
 
         when 6
+          if @trains.size>0
           train = choose_train
           route = choose_route
           train.assign_route(route)
+          else puts "Поезд не создан,сперва создайте поезд!"
+          return start
+          end
 
         when 7
+          if @trains.size>0
           train = choose_train
           if train.class == PassengerTrain
             wagon = create_passenger_carriage
@@ -70,6 +83,8 @@ class Main
             wagon = create_cargo_carriage
           end
           train.add_wagons(wagon)
+          else puts "Поезд не создан,сперва создайте поезд!"
+          end
 
         when 8
           train = choose_train
@@ -102,6 +117,7 @@ class Main
     name = gets.chomp
     station = Station.new(name)
     @stations << station
+
   end
 
   def choose_station
