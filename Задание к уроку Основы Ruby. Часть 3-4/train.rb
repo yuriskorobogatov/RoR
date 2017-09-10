@@ -1,6 +1,5 @@
 class Train
-  attr_reader :speed, :type
-
+  attr_reader :speed, :type, :number
   def initialize(number)
     @number = number
     @speed = 0
@@ -62,7 +61,11 @@ class Train
     #Знать текущую станцию не обязательно для передвижения поезда по маршруту
     #Так посоветовал куратор
   def next_station?
+    if stations.size>0
     @station_index < @route.station.length
+    else puts "Станция не создана, сперва создайте станцию!"
+    return start
+    end
   end
 
   def prev_station?

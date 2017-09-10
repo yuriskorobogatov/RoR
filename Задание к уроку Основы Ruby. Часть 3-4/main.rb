@@ -78,25 +78,37 @@ class Main
           if @trains.size>0
           train = choose_train
           if train.class == PassengerTrain
-            wagon = create_passenger_carriage
+            wagon = create_passenger_wagons
           else
-            wagon = create_cargo_carriage
+            wagon = create_cargo_wagons
           end
-          train.add_wagons(wagon)
+          train.add_wagon(wagon)
           else puts "Поезд не создан,сперва создайте поезд!"
           end
 
         when 8
+          if @trains.size>0
           train = choose_train
           train.remove_wagons
+          else puts "Поезд не создан!"
+          return start
+          end
 
         when 9
+          if @trains.size>0
           train = choose_train
           train.move_next
+          else puts "Поезд не создан!"
+          return start
+          end
 
         when 10
+          if @trains.size>0
           train = choose_train
           train.move_back
+          else puts "Поезд не создан!"
+          return start
+          end
 
         when 11
           @stations.each { |station| puts station.name }
