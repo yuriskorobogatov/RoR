@@ -48,34 +48,25 @@ class Main
           create_route
 
         when 4
-          if @stations.size>0 && @routes.size>0
+          return unless  def_station_and_route?
           station = choose_station
           route = choose_route
           route.add_station(station)
-          else puts "Станция и маршрут еще не созданы, сначала создайте станцию и Ымаршрут!"
-          return start
-          end
 
         when 5
-          if @stations.size>0 && @routes.size>0
+          return unless  def_station_and_route?
           station = choose_station
           route = choose_route
           route.delete_station(station)
-          else puts "Станция и маршрут еще не созданы, сначала создайте станцию и маршрут!"
-          return start
-          end
 
         when 6
-          if @trains.size>0
+          return unless def_train?
           train = choose_train
           route = choose_route
           train.assign_route(route)
-          else puts "Поезд не создан,сперва создайте поезд!"
-          return start
-          end
 
         when 7
-          if @trains.size>0
+          return unless def_train?
           train = choose_train
           if train.class == PassengerTrain
             wagon = create_passenger_wagons
@@ -83,32 +74,21 @@ class Main
             wagon = create_cargo_wagons
           end
           train.add_wagon(wagon)
-          else puts "Поезд не создан,сперва создайте поезд!"
-          end
 
         when 8
-          if @trains.size>0
+          return unless def_train?
           train = choose_train
           train.remove_wagons
-          else puts "Поезд не создан!"
-          return start
-          end
 
         when 9
-          if @trains.size>0
+          return unless def_train?
           train = choose_train
           train.move_next
-          else puts "Поезд не создан!"
-          return start
-          end
 
         when 10
-          if @trains.size>0
+          return unless def_train?
           train = choose_train
           train.move_back
-          else puts "Поезд не создан!"
-          return start
-          end
 
         when 11
           @stations.each { |station| puts station.name }
@@ -201,7 +181,22 @@ class Main
     wagons = CargoCarriage.new
   end
 
+  def def_station_and_route?
+   if @stations.size>0 && @routes.size>0
+   else puts "Станция и маршрут еще не созданы, сначала создайте станцию и маршрут!"
+   return start
+   end
+  end
+
+  def def_train?
+    if @trains.size>0
+    else puts "Поезд не создан,сперва создайте поезд!"
+    return start
+    end
+  end
+
 end
+
 Main.new.start
 
 
