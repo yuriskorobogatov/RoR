@@ -1,11 +1,11 @@
 require_relative 'station.rb'
 require_relative 'route.rb'
 require_relative 'train.rb'
-require_relative 'passenger_train'
-require_relative 'cargo_train'
+require_relative 'passenger_train.rb'
+require_relative 'cargo_train.rb'
 require_relative 'carriage.rb'
-require_relative 'cargo_carriage'
-require_relative 'passenger_carriage'
+require_relative 'cargo_carriage.rb'
+require_relative 'passenger_carriage.rb'
 
 class Main
   attr_reader :stations, :trains, :routes
@@ -17,8 +17,10 @@ class Main
   end
 
   def start
-        loop do
-      puts "Выберите действие:
+    loop do
+      puts "
+================================================
+        Выберите действие:
         1 - Создать станцию
         2 - Создать поезд
         3 - Создать маршрут
@@ -31,7 +33,8 @@ class Main
         10 - Переместить поезд назад по маршруту
         11 - Посмотреть список станций
         12 - Посмотреть список поездов на станции
-        0 - Выход"
+        0 - Выход
+================================================="
 
       action = gets.to_i
 
@@ -48,54 +51,32 @@ class Main
           create_route
 
         when 4
-          return unless  def_station_and_route?
-          station = choose_station
-          route = choose_route
-          route.add_station(station)
+          add_station_to_route
 
         when 5
-          return unless  def_station_and_route?
-          station = choose_station
-          route = choose_route
-          route.delete_station(station)
+          del_station_from_route
 
         when 6
-          return unless def_train?
-          train = choose_train
-          route = choose_route
-          train.assign_route(route)
+          assign_route_to_train
 
         when 7
-          return unless def_train?
-          train = choose_train
-          if train.class == PassengerTrain
-            wagon = create_passenger_wagons
-          else
-            wagon = create_cargo_wagons
-          end
-          train.add_wagon(wagon)
+          add_wagon_to_train
 
         when 8
-          return unless def_train?
-          train = choose_train
-          train.remove_wagons
+          del_wagon_from_train
 
         when 9
-          return unless def_train?
-          train = choose_train
-          train.move_next
+          move_train_forward
 
         when 10
-          return unless def_train?
-          train = choose_train
-          train.move_back
+          move_train_backward
 
         when 11
-          @stations.each { |station| puts station.name }
+          show_list_of_stations
 
         when 12
-          station = choose_station
-          puts station.train
+          show_list_of_trains_on_station
+
         else
           puts "Введите число от 0 до 12"
       end
@@ -103,18 +84,30 @@ class Main
   end
 
   protected
+  #Все эти методы отнес в секцию protected чтоб с внешки можно было вызывать, только те методы, что указаны в
+  # текстовом меню
 
   def create_station
     puts "Введите название станции: "
     name = gets.chomp
-    station = Station.new(name)
-    @stations << station
-
+    if @stations.find { |station| station.name == name}
+      puts "Станция с таким именем уже существует"
+      return create_station
+    else
+      station = Station.new(name)
+      @stations << station
+    puts "Создана станция #{station.inspect}"
+    end
   end
 
   def choose_station
-    puts "Введите название станции"
+    puts "Введите название станции из предложенных ниже:"
+    @stations.each {|stantion| puts stantion.name}
     name = gets.chomp
+    unless @stations.find { |station| station.name == name }
+     puts "Такой станции не существует"
+     return choose_station
+    end
     @stations.find { |station| station.name == name }
   end
 
@@ -126,28 +119,35 @@ class Main
       create_cargo_train
     else
       puts "Введите 1 или 2"
+      return create_train
     end
   end
 
   def create_passenger_train
     number = input_number_of_train
-    train = PassengerTrain.new(number)
+   p train = PassengerTrain.new(number)
     @trains << train
   end
 
   def create_cargo_train
     number = input_number_of_train
-    train = CargoTrain.new(number)
+   p train = CargoTrain.new(number)
     @trains << train
   end
 
   def input_number_of_train
-    puts "Введите номер поезда: "
+    puts "введите номер поезда:"
+    @trains.each {|train| puts train.number}
     number = gets.to_i
   end
 
   def choose_train
+    print "Из списка, представленного ниже, "
     number = input_number_of_train
+    unless @trains.find { |train| train.number == number }
+      puts "Поезда с таким номером не существует"
+      return choose_train
+    end
     @trains.find { |train| train.number == number }
   end
 
@@ -159,18 +159,60 @@ class Main
   end
 
   def create_route
+    puts "Введите название маршрута:"
+    name = gets.chomp
+    if @routes.find {|route| route.name == name}
+      puts "Маршрут с таким названием уже существует, введите другое название маршрута"
+      return create_route
+      else
     puts "Начальная станция: "
     first_station = choose_station
     puts "Конечная станция: "
     last_station = choose_station
-    route = Route.new(first_station, last_station)
+    route = Route.new(name, first_station, last_station)
     @routes << route
+    puts "Создан маршрут: #{route.inspect}"
+    end
   end
 
   def choose_route
-    puts "Введите порядковый номер маршрута: "
-    number = gets.to_i
-    @routes[number - 1]
+    puts "Введите название маршрута из предложенных ниже: "
+    @routes.each {|route| puts route.name}
+    name = gets.chomp
+    unless @routes.find { |route| route.name == name }
+      puts "Такого маршрута не существует"
+      return choose_route
+    end
+    #без этой строки метод возвращает nil
+    @routes.find { |route| route.name == name }
+  end
+
+  def add_station_to_route
+  station_and_route?
+  station = choose_station
+  route = choose_route
+  if route.stations.find {|station1| station1.name == station.name}
+    puts "Данная станция уже существует в маршруте, повторное добавление запрещено"
+    return add_station_to_route
+  else
+  route.add_station(station)
+  p route
+  end
+  end
+
+  def del_station_from_route
+ station_and_route?
+  station = choose_station
+  route = choose_route
+  route.delete_station(station)
+  p route
+  end
+
+  def assign_route_to_train
+  train?
+  train = choose_train
+  route = choose_route
+  p train.assign_route(route)
   end
 
   def create_passenger_wagons
@@ -181,22 +223,59 @@ class Main
     wagons = CargoCarriage.new
   end
 
-  def def_station_and_route?
-   if @stations.size>0 && @routes.size>0
-   else puts "Станция и маршрут еще не созданы, сначала создайте станцию и маршрут!"
-   return start
-   end
+  def add_wagon_to_train
+    train?
+    train = choose_train
+    if train.class == PassengerTrain
+      wagon = create_passenger_wagons
+    else
+      wagon = create_cargo_wagons
+    end
+    p train.add_wagon(wagon)
   end
 
-  def def_train?
-    if @trains.size>0
-    else puts "Поезд не создан,сперва создайте поезд!"
-    return start
+  def del_wagon_from_train
+  train?
+  train = choose_train
+  train.remove_wagons
+  end
+
+  def move_train_forward
+  train?
+  train = choose_train
+  train.move_next
+  end
+
+  def move_train_backward
+ train?
+  train = choose_train
+  train.move_back
+  end
+
+
+
+  def show_list_of_stations
+  @stations.each { |station| puts station.name }
+  end
+
+  def show_list_of_trains_on_station
+  station = choose_station
+  puts station.trains
+  end
+
+  def station_and_route?
+    unless @stations.size>0 && @routes.size>0
+    puts "Станция и маршрут еще не созданы, сначала создайте станцию и маршрут!"
+    end
+  end
+
+  def train?
+    unless @trains.size>0
+    puts "Поезд не создан,сперва создайте поезд!"
+    return create_train
     end
   end
 
 end
 
 Main.new.start
-
-
