@@ -1,6 +1,6 @@
-
 class Train
   attr_reader :speed, :type, :number
+
   def initialize(number)
     @number = number
     @speed = 0
@@ -21,7 +21,7 @@ class Train
   end
 
   def remove_wagons
-    if @speed.zero? && @wagons.length>0
+    if @speed.zero? && @wagons.length > 0
       @wagons.pop
     else
       puts "Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!"
@@ -68,14 +68,13 @@ class Train
 
   protected
   #Выделил эти методы по принципу:
-  #Пользователь не должен менять маршрут следующей или предидущей станции, да бы не ненарушить  построеный маршрут.
+  #Пользователь не должен менять маршрут следующей или предыдущей станции, дабы не ненарушить  построенный маршрут.
 
   def last_station?
     current_station == @route.stations[-1]
-   end
+  end
 
   def first_station?
     current_station == @route.stations[0]
   end
-
 end
