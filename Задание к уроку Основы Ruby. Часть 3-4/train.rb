@@ -25,6 +25,7 @@ class Train
       @wagons.pop
     else
       puts "Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!"
+      return
     end
   end
 
@@ -35,23 +36,25 @@ class Train
   end
 
   def move_back
-    if first_station? == true
+    if first_station?
       puts "Поезд находится на первой станции и назад ехать не может!"
+      return
+    else
+      current_station.depart_train(self)
+      @station_index -= 1
+      current_station.add_train(self)
     end
-    return if first_station?
-    current_station.depart_train(self)
-    @station_index -= 1
-    current_station.add_train(self)
   end
 
   def move_next
-    if last_station? == true
+    if last_station?
       puts "Поезд находится на конечной станции и вперед не поедет!"
+      return
+    else
+      current_station.depart_train(self)
+      @station_index += 1
+      current_station.add_train(self)
     end
-    return if last_station?
-    current_station.depart_train(self)
-    @station_index += 1
-    current_station.add_train(self)
   end
 
   def next_station

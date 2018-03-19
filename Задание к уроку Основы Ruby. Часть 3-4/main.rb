@@ -21,19 +21,19 @@ class Main
       puts "
 ================================================
         Выберите действие:
-        1 - Создать станцию
-        2 - Создать поезд
-        3 - Создать маршрут
-        4 - Добавить станцию в маршрут
-        5 - Удалить станцию из маршрута
-        6 - Назначить маршрут поезду
-        7 - Добавить вагон к поезду
-        8 - Отцепить вагон от поезда
-        9 - Переместить поезд вперед по маршруту
+        1  - Создать станцию
+        2  - Создать поезд
+        3  - Создать маршрут
+        4  - Добавить станцию в маршрут
+        5  - Удалить станцию из маршрута
+        6  - Назначить маршрут поезду
+        7  - Добавить вагон к поезду
+        8  - Отцепить вагон от поезда
+        9  - Переместить поезд вперед по маршруту
         10 - Переместить поезд назад по маршруту
         11 - Посмотреть список станций
         12 - Посмотреть список поездов на станции
-        0 - Выход
+        0  - Выход
 ================================================="
 
       action = gets.to_i
@@ -94,7 +94,7 @@ class Main
     name = gets.chomp
     if @stations.find{|station| station.name == name}
       puts "Станция с таким именем уже существует"
-      return start
+      return
     else
       station = Station.new(name)
       @stations << station
@@ -108,7 +108,11 @@ class Main
     name = gets.chomp
     unless @stations.find{|station| station.name == name}
       puts "Такой станции не существует"
-      return start
+      #если сюда поставлю просто return, то при неправильном вводе имени первой, либо второй станции, программа будет
+      # подставлять nil
+      # метод choose_station ни каких других методов не вызывает, по этому считаю, что его можно замкнуть на себя
+      # пока этот метод не выполнится, другие не запускаюстя.
+      choose_station
     end
     @stations.find{|station| station.name == name}
   end
@@ -121,7 +125,7 @@ class Main
       create_cargo_train
     else
       puts "Введите 1 или 2"
-      return start
+      return
     end
   end
 
@@ -148,7 +152,7 @@ class Main
     number = input_number_of_train
     unless @trains.find{|train| train.number == number}
       puts "Поезда с таким номером не существует"
-      return start
+      return
     end
     @trains.find{|train| train.number == number}
   end
@@ -165,7 +169,7 @@ class Main
     name = gets.chomp
     if @routes.find{|route| route.name == name}
       puts "Маршрут с таким названием уже существует, введите другое название маршрута"
-      return start
+      return
     else
       puts "Начальная станция: "
       first_station = choose_station
@@ -183,18 +187,22 @@ class Main
     name = gets.chomp
     unless @routes.find{|route| route.name == name}
       puts "Такого маршрута не существует"
-      return start
+      return
     end
     @routes.find{|route| route.name == name}
   end
 
   def add_station_to_route
-    station_and_route?
+    unless station_and_route?
+      puts "Станции или маршрута не существует."
+      return
+    else
     station = choose_station
     route = choose_route
+    end
     if route.stations.find{|station1| station1.name == station.name}
       puts "Данная станция уже существует в маршруте, повторное добавление запрещено"
-      return start
+      return
     else
       route.add_station(station)
       p route
@@ -202,18 +210,26 @@ class Main
   end
 
   def del_station_from_route
-    station_and_route?
-    station = choose_station
-    route = choose_route
-    route.delete_station(station)
-    p route
+    unless station_and_route?
+      puts "Станции или маршрута не существует."
+      return
+    else
+      station = choose_station
+      route = choose_route
+      route.delete_station(station)
+      p route
+    end
   end
 
   def assign_route_to_train
-    train?
+    unless train?
+      puts "Поезд не существует"
+      return
+    else
     train = choose_train
     route = choose_route
     p train.assign_route(route)
+    end
   end
 
   def create_passenger_wagons
@@ -225,7 +241,10 @@ class Main
   end
 
   def add_wagon_to_train
-    train?
+    unless train?
+      puts "Поезд не существует"
+      return
+    else
     train = choose_train
     if train.class == PassengerTrain
        wagon = create_passenger_wagons
@@ -233,24 +252,38 @@ class Main
        wagon = create_cargo_wagons
     end
     p train.add_wagon(wagon)
+    end
   end
 
   def del_wagon_from_train
-    train?
+    unless train?
+      puts "Поезд не существует"
+      return
+    else
     train = choose_train
     train.remove_wagons
+    end
   end
 
   def move_train_forward
-    train?
-    train = choose_train
-    train.move_next
+    unless train?
+      puts "Поезд не существует"
+      return
+    else
+      train = choose_train
+      train.move_next
+    end
+
   end
 
   def move_train_backward
-    train?
+    unless train?
+      puts "Поезд не существует"
+      return
+    else
     train = choose_train
     train.move_back
+    end
   end
 
   def show_list_of_stations
@@ -263,16 +296,11 @@ class Main
   end
 
   def station_and_route?
-    unless @stations.size > 0 && @routes.size > 0
-    puts "Станция и маршрут еще не созданы, сначала создайте станцию и маршрут!"
-    end
+    @stations.size > 0 && @routes.size > 0
   end
 
   def train?
-    unless @trains.size > 0
-    puts "Поезд не создан,сперва создайте поезд!"
-    return start
-    end
+    @trains.size > 0
   end
 end
 
