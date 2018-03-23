@@ -1,4 +1,4 @@
-require_relative 'modules'
+require_relative 'InstanceCounter'
 
 class Station
   attr_reader :name, :trains
@@ -10,7 +10,6 @@ class Station
     @name = name
     @trains = []
     @@stations << self
-    p register_instance
   end
 
   def add_train(train)
@@ -26,6 +25,6 @@ class Station
   end
 
   def self.all
-    p @@stations
+    @@stations
   end
 end

@@ -1,4 +1,5 @@
-require_relative 'modules'
+require_relative 'InstanceCounter'
+require_relative 'AddCompany'
 
 class Train
   attr_reader :speed, :type, :number
@@ -13,7 +14,6 @@ class Train
     @station_index = 0
     @@trains << self
     @company = company
-    p register_instance
   end
 
   def accelerate
@@ -78,11 +78,8 @@ class Train
   end
 
   def self.find(number)
-    if @@trains.find{|train| train.number == number}
-      puts @@trains.find{|train| train.number == number}
-    else
-      return
-    end
+     @@trains.find{|train| train.number == number}
+     return
   end
 
   protected

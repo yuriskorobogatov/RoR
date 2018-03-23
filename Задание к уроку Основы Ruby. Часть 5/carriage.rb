@@ -1,4 +1,4 @@
-require_relative 'modules'
+require_relative 'AddCompany'
 
 class Carriage
   attr_reader :type

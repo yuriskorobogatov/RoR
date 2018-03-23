@@ -6,13 +6,13 @@ require_relative 'cargo_train.rb'
 require_relative 'carriage.rb'
 require_relative 'cargo_carriage.rb'
 require_relative 'passenger_carriage.rb'
+require_relative 'AddCompany.rb'
 
 
 
 class Main
   attr_reader :stations, :trains, :routes
   include AddCompany
-  include InstanceCounter
 
   def initialize
     @stations = []
@@ -164,10 +164,10 @@ class Main
   def choose_train
     print "Из списка, представленного ниже, "
     number = input_number_of_train
-    unless @trains.find{|train| train.number == number}
-      puts "Поезда с таким номером не существует"
-      return
-    end
+      unless @trains.find{|train| train.number == number}
+        puts "Поезда с таким номером не существует"
+        return
+      end
     @trains.find{|train| train.number == number}
   end
 
@@ -264,10 +264,10 @@ class Main
        train = choose_train
     if train.class == PassengerTrain
        wagon = create_passenger_wagons
-       p wagon.get_company
+       p wagon.company
     else
        wagon = create_cargo_wagons
-       p wagon.get_company
+       p wagon.company
     end
        train.add_wagon(wagon)
        p train
@@ -306,7 +306,7 @@ class Main
   end
 
   def show_list_of_stations
-    Station.all
+    @stations.each{|station| puts station.name}
   end
 
   def show_list_of_trains_on_station
@@ -321,7 +321,7 @@ class Main
   end
 
   def show_company
-    p choose_train.get_company
+    p choose_train.company
   end
 
   def station_and_route?
