@@ -1,9 +1,6 @@
-require_relative 'AddCompany'
+require_relative 'company'
 
 class Carriage
   attr_reader :type
-  include AddCompany
-  def initialize(company)
-    @company = company
-  end
+  include Company
 end
