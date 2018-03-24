@@ -6,13 +6,14 @@ require_relative 'cargo_train.rb'
 require_relative 'carriage.rb'
 require_relative 'cargo_carriage.rb'
 require_relative 'passenger_carriage.rb'
-require_relative 'AddCompany.rb'
+require_relative 'company.rb'
 
 
 
 class Main
   attr_reader :stations, :trains, :routes
-  include AddCompany
+  include Company
+  include InstanceCounter
 
   def initialize
     @stations = []
@@ -84,7 +85,7 @@ class Main
           show_list_of_trains_on_station
 
         when 13
-          show_train
+          find_train
 
         when 14
           show_company
@@ -142,16 +143,14 @@ class Main
   end
 
   def create_passenger_train
-    add_company
     number = input_number_of_train
-    p train = PassengerTrain.new(number, company)
+    p train = PassengerTrain.new(number)
     @trains << train
   end
 
   def create_cargo_train
-    add_company
     number = input_number_of_train
-    p train = CargoTrain.new(number, company)
+    p train = CargoTrain.new(number)
     @trains << train
   end
 
@@ -247,13 +246,11 @@ class Main
   end
 
   def create_passenger_wagons
-    add_company
-    wagons = PassengerCarriage.new(company)
+    wagons = PassengerCarriage.new
   end
 
   def create_cargo_wagons
-    add_company
-    wagons = CargoCarriage.new(company)
+    wagons = CargoCarriage.new
   end
 
   def add_wagon_to_train
@@ -314,7 +311,7 @@ class Main
     puts station.trains
   end
 
-  def show_train
+  def find_train
     puts "Введите номер искомого поезда:"
     number = gets.chomp.to_i
     Train.find(number)
