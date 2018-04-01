@@ -115,7 +115,7 @@ class Main
     end
   rescue RuntimeError => e
     puts e.message
-    start
+    return
   end
 
   def choose_station
@@ -147,20 +147,30 @@ class Main
 
   def create_passenger_train
     number = input_number_of_train
+    if @trains.find{|train| train.number == number}
+      puts "Поезд с таким именем уже существует"
+      return
+    else
     train = PassengerTrain.new(number)
     @trains << train
+    end
   rescue RuntimeError => e
     puts e.message
-    start
+    return
   end
 
   def create_cargo_train
     number = input_number_of_train
+    if @trains.find{|train| train.number == number}
+      puts "Поезд с таким именем уже существует"
+      return
+    else
     train = CargoTrain.new(number)
     @trains << train
+    end
   rescue RuntimeError => e
     puts e.message
-    start
+    return
   end
 
   def input_number_of_train
@@ -202,7 +212,7 @@ class Main
     end
   rescue RuntimeError => e
     puts e.message
-    start
+    return
   end
 
   def choose_route
