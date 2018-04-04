@@ -113,8 +113,8 @@ class Main
       station = Station.new(name)
       @stations << station
     end
-  rescue RuntimeError => e
-    puts e.message
+    rescue RuntimeError => e
+      puts e.message
     return
   end
 
@@ -134,7 +134,10 @@ class Main
   end
 
   def create_train
-    type = input_type_of_train
+    puts "Введите тип поезда:
+    1 - Пассажирский
+    2 - Грузовой"
+    type = gets.to_i
     if type == 1
       create_passenger_train
     elsif type == 2
@@ -146,30 +149,32 @@ class Main
   end
 
   def create_passenger_train
-    number = input_number_of_train
-    if @trains.find{|train| train.number == number}
-      puts "Поезд с таким именем уже существует"
-      return
-    else
-    train = PassengerTrain.new(number)
-    @trains << train
-    end
-  rescue RuntimeError => e
-    puts e.message
-    return
+    puts "Введите номер поезда:"
+    number = gets.chomp
+     if @trains.find{|train| train.number == number}
+       puts "Поезд с таким номером уже существует"
+       return
+     else
+       train = PassengerTrain.new(number)
+       @trains << train
+     end
+     rescue RuntimeError => e
+       puts e.message
+     return
   end
 
   def create_cargo_train
-    number = input_number_of_train
+    puts "Введите номер поезда:"
+    number = gets.chomp
     if @trains.find{|train| train.number == number}
-      puts "Поезд с таким именем уже существует"
+      puts "Поезд с таким номером уже существует"
       return
     else
-    train = CargoTrain.new(number)
-    @trains << train
+      train = CargoTrain.new(number)
+      @trains << train
     end
-  rescue RuntimeError => e
-    puts e.message
+    rescue RuntimeError => e
+      puts e.message
     return
   end
 
@@ -189,13 +194,6 @@ class Main
     @trains.find{|train| train.number == number}
   end
 
-  def input_type_of_train
-    puts "Введите тип поезда:
-    1 - Пассажирский
-    2 - Грузовой"
-    type = gets.to_i
-  end
-
   def create_route
     puts "Введите название маршрута:"
     name = gets.chomp
@@ -210,9 +208,9 @@ class Main
       route = Route.new(name, first_station, last_station)
       @routes << route
     end
-  rescue RuntimeError => e
-    puts e.message
-    return
+      rescue RuntimeError => e
+        puts e.message
+      return
   end
 
   def choose_route
@@ -262,6 +260,9 @@ class Main
     route = choose_route
     train.assign_route(route)
     end
+    rescue RuntimeError => e
+      puts e.message
+    return
   end
 
   def create_passenger_wagons
@@ -287,6 +288,9 @@ class Main
     end
        train.add_wagon(wagon)
     end
+    rescue RuntimeError => e
+      puts e.message
+      return
   end
 
   def del_wagon_from_train

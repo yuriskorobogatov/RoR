@@ -15,6 +15,9 @@ class Station
   end
 
   def validation!
+    #как сгенерировать ошибку (что объект не пренадлежит классу поезд) если мы только объекты класса
+    # Train помещаем в массив trains!? Зачем делать такую валидицию?
+    raise "Данный объект не пренадлежит классу Train" unless @trains.each{|train| train.class == Train}
     raise "Название станции должно состоять минимум из трех символов!" if name.length < 3
     true
   end

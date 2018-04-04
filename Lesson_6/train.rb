@@ -6,8 +6,6 @@ class Train
   include Company
   include InstanceCounter
   @@trains = []
-#Допустимый формат: три буквы или цифры в любом порядке, необязательный
-# дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.
   NUMBER_FORMAT = /^(\d|[a-z]){3}-?(\d|[a-z]){2}$/i
 
   def initialize(number)
@@ -21,8 +19,19 @@ class Train
   end
 
   def validation!
-    raise "Введите номер поезда в правильном формате" if @number !~ NUMBER_FORMAT
+    raise "Введите номер поезда в правильном формате!!" if @number !~ NUMBER_FORMAT
+    raise "Скорость не может быть отрицательной" if @speed < 0
     true
+  end
+
+  def route_valid!
+    raise "Данный объект не пренадлежит классу Route" if @route.class != Route
+    raise "Номер текущей станции превышает длину маршрута" if @station_index +1 > @route.stations.length
+  end
+
+  def wag_valid!
+    raise "Скорость не нулевая" unless @speed.zero?
+    raise "Не соответствие типов вагона и поезда" unless self.type == wagon.type
   end
 
   def accelerate
@@ -34,7 +43,8 @@ class Train
   end
 
   def add_wagon(wagon)
-    @wagons << wagon if @speed.zero? && self.type == wagon.type
+    wag_valid!
+    @wagons << wagon
   end
 
   def remove_wagons
@@ -48,6 +58,7 @@ class Train
 
   def assign_route(route)
     @route = route
+    route_valid!
     @station_index = 0
     current_station.add_train(self)
   end
