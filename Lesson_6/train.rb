@@ -2,7 +2,7 @@ require_relative 'instance_counter'
 require_relative 'company'
 
 class Train
-  attr_reader :speed, :type, :number
+  attr_reader :speed, :type, :number, :wagon
   include Company
   include InstanceCounter
   @@trains = []
@@ -43,8 +43,9 @@ class Train
   end
 
   def add_wagon(wagon)
+    @wagon = wagon
     wag_valid!
-    @wagons << wagon
+    @wagons << @wagon
   end
 
   def remove_wagons
