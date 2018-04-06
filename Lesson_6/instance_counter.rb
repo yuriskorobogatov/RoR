@@ -1,4 +1,3 @@
-
 module InstanceCounter
 
   def self.included(base)
