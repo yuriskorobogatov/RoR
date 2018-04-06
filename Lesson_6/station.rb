@@ -1,7 +1,7 @@
 require_relative 'instance_counter'
 
 class Station
-  attr_reader :trains, :name
+  attr_reader :trains, :name, :train
   include InstanceCounter
   @@stations =[]
 
@@ -9,18 +9,21 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
-    validation!
+    validate!
     @@stations << self
     register_instance
   end
 
-  def validation!
-    raise "Данный объект не пренадлежит классу Train" unless @trains.each{|train| train.class == Train}
+  def validate!
     raise "Название станции должно состоять минимум из трех символов!" if name.length < 3
+    @trains.each do |train|
+      raise "Введенный объект не является объктом класса Station" unless train.is_a? Train
+    end
     true
   end
 
   def add_train(train)
+    @train = train
     trains << train
   end
 

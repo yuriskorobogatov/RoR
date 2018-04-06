@@ -124,11 +124,7 @@ class Main
     name = gets.chomp
     unless @stations.find{|station| station.name == name}
       puts "Такой станции не существует"
-      #если сюда поставлю просто return, то при неправильном вводе имени первой, либо второй станции, программа будет
-      # подставлять nil
-      # метод choose_station ни каких других методов не вызывает, по этому считаю, что его можно замкнуть на себя
-      # пока этот метод не выполнится, другие не запускаюстя.
-      choose_station
+      return
     end
     @stations.find{|station| station.name == name}
   end
@@ -203,8 +199,14 @@ class Main
     else
       puts "Начальная станция: "
       first_station = choose_station
+      unless @stations.find{|station1| station1 == first_station}
+        return
+      end
       puts "Конечная станция: "
       last_station = choose_station
+      unless @stations.find{|station1| station1 == last_station}
+        return
+      end
       route = Route.new(name, first_station, last_station)
       @routes << route
     end
@@ -218,8 +220,8 @@ class Main
     @routes.each{|route| puts route.name}
     name = gets.chomp
     unless @routes.find{|route| route.name == name}
-      puts "Такого маршрута не существует"
-      return choose_route
+      puts "Такого маршрута не существует."
+      return
     end
     @routes.find{|route| route.name == name}
   end
@@ -230,7 +232,13 @@ class Main
       return
     else
     station = choose_station
+    unless @stations.find{|station1| station1 == station}
+      return
+    end
     route = choose_route
+    unless @routes.find{|route1| route1 == route}
+      return
+    end
     end
     if route.stations.find{|station1| station1.name == station.name}
       puts "Данная станция уже существует в маршруте, повторное добавление запрещено"
@@ -246,7 +254,13 @@ class Main
       return
     else
       station = choose_station
+      unless @stations.find{|station1| station1 == station}
+        return
+      end
       route = choose_route
+      unless @routes.find{|route1| route1 == route}
+        return
+      end
       route.delete_station(station)
     end
   end
@@ -257,7 +271,13 @@ class Main
       return
     else
     train = choose_train
+    unless @trains.find{|train1| train1 == train}
+      return
+    end
     route = choose_route
+    unless @routes.find{|route1| route1 == route}
+      return
+    end
     train.assign_route(route)
     end
     rescue RuntimeError => e
@@ -279,6 +299,9 @@ class Main
       return
     else
        train = choose_train
+       unless @trains.find{|train1| train1 == train}
+         return
+       end
     if train.class == PassengerTrain
        wagon = create_passenger_wagons
        wagon.company
@@ -299,6 +322,9 @@ class Main
       return
     else
     train = choose_train
+    unless @trains.find{|train1| train1 == train}
+      return
+    end
     train.remove_wagons
     end
   end
@@ -309,6 +335,13 @@ class Main
       return
     else
       train = choose_train
+      unless @trains.find{|train1| train1 == train}
+        return
+      end
+      if train.assign_route?
+        puts "Поезду не присвоен маршрут! Для начала создайте маршрут и присвойте его поезду!"
+        return
+      end
       train.move_next
     end
 
@@ -320,6 +353,13 @@ class Main
       return
     else
     train = choose_train
+    unless @trains.find{|train1| train1 == train}
+      return
+    end
+    if train.assign_route?
+      puts "Поезду не присвоен маршрут! Для начала создайте маршрут и присвойте его поезду!"
+      return
+    end
     train.move_back
     end
   end
@@ -330,6 +370,9 @@ class Main
 
   def show_list_of_trains_on_station
     station = choose_station
+    unless @stations.find{|station1| station1 == station}
+      return
+    end
     puts station.trains
   end
 
