@@ -2,12 +2,11 @@ require_relative 'instance_counter'
 require_relative 'company'
 
 class Train
-  attr_reader :speed, :type, :number
+  attr_reader :speed, :type, :number, :wagons, :route
   include Company
   include InstanceCounter
   @@trains = []
-#Допустимый формат: три буквы или цифры в любом порядке, необязательный
-# дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.
+
   NUMBER_FORMAT = /^(\d|[a-z]){3}-?(\d|[a-z]){2}$/i
 
   def initialize(number)
@@ -15,13 +14,17 @@ class Train
     @speed = 0
     @wagons = []
     @station_index = 0
-    validation!
+    validate!
     @@trains << self
     register_instance
   end
 
-  def validation!
-    raise "Введите номер поезда в правильном формате" if @number !~ NUMBER_FORMAT
+  def validate!
+    raise "Введите номер поезда в правильном формате!!" if @number !~ NUMBER_FORMAT
+    raise "Скорость не может быть отрицательной" if @speed < 0
+    @wagons.each do |wagon|
+      raise "Данный объект не пренадлежит классу Wagon" unless wagon.is_a? Wagon
+    end
     true
   end
 
@@ -34,7 +37,9 @@ class Train
   end
 
   def add_wagon(wagon)
-    @wagons << wagon if @speed.zero? && self.type == wagon.type
+    if @speed.zero? && self.type == wagon.type
+    @wagons << wagon
+    end
   end
 
   def remove_wagons
@@ -50,6 +55,14 @@ class Train
     @route = route
     @station_index = 0
     current_station.add_train(self)
+  end
+
+  def assign_route?
+      self.route.nil?
+  end
+
+  def current_station
+    @route.stations[@station_index]
   end
 
   def move_back
@@ -76,10 +89,6 @@ class Train
 
   def next_station
     @route.stations[@station_index + 1]
-  end
-
-  def current_station
-    @route.stations[@station_index]
   end
 
   def prev_station

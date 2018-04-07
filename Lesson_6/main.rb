@@ -113,9 +113,9 @@ class Main
       station = Station.new(name)
       @stations << station
     end
-  rescue RuntimeError => e
-    puts e.message
-    start
+    rescue RuntimeError => e
+      puts e.message
+    return
   end
 
   def choose_station
@@ -124,17 +124,16 @@ class Main
     name = gets.chomp
     unless @stations.find{|station| station.name == name}
       puts "Такой станции не существует"
-      #если сюда поставлю просто return, то при неправильном вводе имени первой, либо второй станции, программа будет
-      # подставлять nil
-      # метод choose_station ни каких других методов не вызывает, по этому считаю, что его можно замкнуть на себя
-      # пока этот метод не выполнится, другие не запускаюстя.
-      choose_station
+      return
     end
     @stations.find{|station| station.name == name}
   end
 
   def create_train
-    type = input_type_of_train
+    puts "Введите тип поезда:
+    1 - Пассажирский
+    2 - Грузовой"
+    type = gets.to_i
     if type == 1
       create_passenger_train
     elsif type == 2
@@ -146,21 +145,33 @@ class Main
   end
 
   def create_passenger_train
-    number = input_number_of_train
-    train = PassengerTrain.new(number)
-    @trains << train
-  rescue RuntimeError => e
-    puts e.message
-    start
+    puts "Введите номер поезда:"
+    number = gets.chomp
+     if @trains.find{|train| train.number == number}
+       puts "Поезд с таким номером уже существует"
+       return
+     else
+       train = PassengerTrain.new(number)
+       @trains << train
+     end
+     rescue RuntimeError => e
+       puts e.message
+     return
   end
 
   def create_cargo_train
-    number = input_number_of_train
-    train = CargoTrain.new(number)
-    @trains << train
-  rescue RuntimeError => e
-    puts e.message
-    start
+    puts "Введите номер поезда:"
+    number = gets.chomp
+    if @trains.find{|train| train.number == number}
+      puts "Поезд с таким номером уже существует"
+      return
+    else
+      train = CargoTrain.new(number)
+      @trains << train
+    end
+    rescue RuntimeError => e
+      puts e.message
+    return
   end
 
   def input_number_of_train
@@ -179,13 +190,6 @@ class Main
     @trains.find{|train| train.number == number}
   end
 
-  def input_type_of_train
-    puts "Введите тип поезда:
-    1 - Пассажирский
-    2 - Грузовой"
-    type = gets.to_i
-  end
-
   def create_route
     puts "Введите название маршрута:"
     name = gets.chomp
@@ -195,14 +199,20 @@ class Main
     else
       puts "Начальная станция: "
       first_station = choose_station
+      unless @stations.find{|station1| station1 == first_station}
+        return
+      end
       puts "Конечная станция: "
       last_station = choose_station
+      unless @stations.find{|station1| station1 == last_station}
+        return
+      end
       route = Route.new(name, first_station, last_station)
       @routes << route
     end
-  rescue RuntimeError => e
-    puts e.message
-    start
+      rescue RuntimeError => e
+        puts e.message
+      return
   end
 
   def choose_route
@@ -210,8 +220,8 @@ class Main
     @routes.each{|route| puts route.name}
     name = gets.chomp
     unless @routes.find{|route| route.name == name}
-      puts "Такого маршрута не существует"
-      return choose_route
+      puts "Такого маршрута не существует."
+      return
     end
     @routes.find{|route| route.name == name}
   end
@@ -222,7 +232,13 @@ class Main
       return
     else
     station = choose_station
+    unless @stations.find{|station1| station1 == station}
+      return
+    end
     route = choose_route
+    unless @routes.find{|route1| route1 == route}
+      return
+    end
     end
     if route.stations.find{|station1| station1.name == station.name}
       puts "Данная станция уже существует в маршруте, повторное добавление запрещено"
@@ -238,7 +254,13 @@ class Main
       return
     else
       station = choose_station
+      unless @stations.find{|station1| station1 == station}
+        return
+      end
       route = choose_route
+      unless @routes.find{|route1| route1 == route}
+        return
+      end
       route.delete_station(station)
     end
   end
@@ -249,9 +271,18 @@ class Main
       return
     else
     train = choose_train
+    unless @trains.find{|train1| train1 == train}
+      return
+    end
     route = choose_route
+    unless @routes.find{|route1| route1 == route}
+      return
+    end
     train.assign_route(route)
     end
+    rescue RuntimeError => e
+      puts e.message
+    return
   end
 
   def create_passenger_wagons
@@ -268,6 +299,9 @@ class Main
       return
     else
        train = choose_train
+       unless @trains.find{|train1| train1 == train}
+         return
+       end
     if train.class == PassengerTrain
        wagon = create_passenger_wagons
        wagon.company
@@ -277,6 +311,9 @@ class Main
     end
        train.add_wagon(wagon)
     end
+    rescue RuntimeError => e
+      puts e.message
+      return
   end
 
   def del_wagon_from_train
@@ -285,6 +322,9 @@ class Main
       return
     else
     train = choose_train
+    unless @trains.find{|train1| train1 == train}
+      return
+    end
     train.remove_wagons
     end
   end
@@ -295,6 +335,13 @@ class Main
       return
     else
       train = choose_train
+      unless @trains.find{|train1| train1 == train}
+        return
+      end
+      if train.assign_route?
+        puts "Поезду не присвоен маршрут! Для начала создайте маршрут и присвойте его поезду!"
+        return
+      end
       train.move_next
     end
 
@@ -306,6 +353,13 @@ class Main
       return
     else
     train = choose_train
+    unless @trains.find{|train1| train1 == train}
+      return
+    end
+    if train.assign_route?
+      puts "Поезду не присвоен маршрут! Для начала создайте маршрут и присвойте его поезду!"
+      return
+    end
     train.move_back
     end
   end
@@ -316,6 +370,9 @@ class Main
 
   def show_list_of_trains_on_station
     station = choose_station
+    unless @stations.find{|station1| station1 == station}
+      return
+    end
     puts station.trains
   end
 

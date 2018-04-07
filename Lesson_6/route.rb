@@ -8,7 +8,7 @@ class Route
     @name = name
     @stations = [first_station, last_station]
     register_instance
-    validation!
+    validate!
   end
 
   def add_station(station)
@@ -19,8 +19,11 @@ class Route
     @stations.delete(station) if station != @stations[0] && station != @stations[-1]
   end
 
-  def validation!
+  def validate!
     raise "Название маршрута должно быть не менее шести символов" if @name.length < 6
+    @stations.each do |station|
+      raise "Введенный объект не является объктом класса Station" unless station.is_a? Station
+    end
     true
   end
 end
