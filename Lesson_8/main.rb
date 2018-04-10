@@ -336,6 +336,8 @@ class Main
     end
     train.remove_wagons
     end
+  rescue RuntimeError => e
+    puts e.message
   end
 
   def move_train_forward
@@ -353,7 +355,8 @@ class Main
       end
       train.move_next
     end
-
+  rescue RuntimeError => e
+    puts e.message
   end
 
   def move_train_backward
@@ -371,6 +374,8 @@ class Main
     end
     train.move_back
     end
+  rescue RuntimeError => e
+    puts e.message
   end
 
   def take_seat_or_volume
@@ -384,11 +389,17 @@ class Main
         return
       end
     end
+    unless train.wagons.length > 0
+      puts "У поезда нет вагонов!"
+      return
+    end
     if train.class == PassengerTrain
     train.wagons[-1].take_a_seat
     else
       train.wagons[-1].take_a_capacity
     end
+  rescue RuntimeError => e
+    puts e.message
   end
 
   def show_list_of_stations

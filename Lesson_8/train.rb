@@ -44,11 +44,10 @@ class Train
   end
 
   def remove_wagons
-    if @speed.zero? && @wagons.length > 0
+    if @speed.zero? && @wagons.empty?
       @wagons.pop
     else
-      puts "Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!"
-      return
+      raise "Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!"
     end
   end
 
@@ -59,7 +58,7 @@ class Train
   end
 
   def assign_route?
-      self.route.nil?
+    route.nil?
   end
 
   def current_station
@@ -68,8 +67,7 @@ class Train
 
   def move_back
     if first_station?
-      puts "Поезд находится на первой станции и назад ехать не может!"
-      return
+      raise "Поезд находится на первой станции и назад ехать не может!"
     else
       current_station.depart_train(self)
       @station_index -= 1
@@ -79,8 +77,7 @@ class Train
 
   def move_next
     if last_station?
-      puts "Поезд находится на конечной станции и вперед не поедет!"
-      return
+      raise "Поезд находится на конечной станции и вперед не поедет!"
     else
       current_station.depart_train(self)
       @station_index += 1
@@ -97,12 +94,11 @@ class Train
   end
 
   def self.find(number)
-     p @@trains.find{|train| train.number == number}
-     return
+    p @@trains.find{|train| train.number == number}
   end
 
   def show_wagons
-    @wagons.each {|wagon| yield wagon}
+    @wagons.each { |wagon| yield wagon }
   end
 
   protected
