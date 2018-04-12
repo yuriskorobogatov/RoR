@@ -22,9 +22,9 @@ class Route
   end
 
   def validate!
-    raise "Название маршрута должно быть не менее шести символов" if @name.length < 6
+    raise 'Длина маршрута не может быть менее 6 символов' if @name.length < 6
     @stations.each do |station|
-      raise "Введенный объект не является объктом класса Station" unless station.is_a? Station
+      raise 'Объект не является объктом класса Station' unless station.is_a? Station
     end
     true
   end

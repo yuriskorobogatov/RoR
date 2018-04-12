@@ -20,11 +20,10 @@ class Train
   end
 
   def validate!
-    raise "Введите номер поезда в правильном формате!!" if @number !~ NUMBER_FORMAT
-    raise "Скорость не может быть отрицательной" if @speed.negative?
+    raise 'Введите номер поезда в правильном формате!!' if @number !~ NUMBER_FORMAT
+    raise 'Скорость не может быть отрицательной' if @speed.negative?
     @wagons.each do |wagon|
-      raise "Данный объект не пренадлежит классу Wagon" unless wagon.is_a? Wagon
-      raise "Номер станции превышает допустимое значение" if @route && @stations_index && @station_index + 1 >= @route.stations.length
+      raise 'Данный объект не пренадлежит классу Wagon' unless wagon.is_a? Wagon
     end
     true
   end
@@ -43,7 +42,7 @@ class Train
 
   def remove_wagons
     return @wagons.pop if @speed.zero? && @wagons.length.positive?
-    raise "Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!"
+    raise 'Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!'
   end
 
   def assign_route(route)
@@ -61,14 +60,14 @@ class Train
   end
 
   def move_back
-    return raise "Поезд находится на первой станции и назад ехать не может!" if first_station?
+    return raise 'Поезд находится на первой станции!' if first_station?
     current_station.depart_train(self)
     @station_index -= 1
     current_station.add_train(self)
   end
 
   def move_next
-    return raise "Поезд находится на конечной станции и вперед не поедет!" if last_station?
+    return raise 'Поезд находится на конечной станции!' if last_station?
     current_station.depart_train(self)
     @station_index += 1
     current_station.add_train(self)

@@ -16,9 +16,9 @@ class Station
   end
 
   def validate!
-    raise "Название станции должно состоять минимум из трех символов!" if name.length < 3
+    raise 'Название станции должно состоять минимум из трех символов!' if name.length < 3
     @trains.each do |train|
-      raise "Введенный объект не является объктом класса Station" unless train.is_a? Train
+      raise 'Введенный объект не является объктом класса Station' unless train.is_a? Train
     end
     true
   end

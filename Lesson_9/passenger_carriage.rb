@@ -10,11 +10,8 @@ class PassengerCarriage < Carriage
   end
 
   def take_a_seat
-    if @seats_sum.zero?
-      raise "Уже все места заняты, больше мест нет!!!"
-    else
-      @seats_sum -= 1
-    end
+    return raise 'Уже все места заняты, больше мест нет!!!' if @seats_sum.zero?
+    @seats_sum -= 1
   end
 
   def show_free_seats
