@@ -44,7 +44,7 @@ class Train
   end
 
   def remove_wagons
-    if @speed.zero? && @wagons.empty?
+    if @speed.zero? && @wagons.length > 0
       @wagons.pop
     else
       raise "Ошибка отцепки! Либо поезд не остановлен, либо у него нет вагонов!"
