@@ -10,7 +10,7 @@ class CargoCarriage < Carriage
   end
 
   def take_a_capacity
-    return raise 'Already the whole place is occupied!' if @sum_capacity.zero?
+    return raise 'Уже все места заняты!' if @sum_capacity.zero?
     @sum_capacity -= 1
   end
 

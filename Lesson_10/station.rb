@@ -16,8 +16,8 @@ class Station
   validate :name, :format, VALID_NAME
   validate :name, :type, String
 
-   strong_attr_accessor :trains, Array
-   attr_accessor_with_history :name
+  strong_attr_accessor :trains, Array
+  attr_accessor_with_history :name
 
   def initialize(name)
     @name = name.to_s
@@ -49,4 +49,3 @@ class Station
     @trains.each { |train| yield train }
   end
 end
-

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'acessors'
 
 class Test
@@ -14,7 +16,7 @@ test.one = ['testing', 12, 13]
 test.one = 'string'
 
 test.two = 'steam'
-test.two = 12345
+test.two = 12_345
 
 p test.name = 'tasdf'
 

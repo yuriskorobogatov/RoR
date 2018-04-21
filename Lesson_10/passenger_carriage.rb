@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'validation'
+
 class PassengerCarriage < Carriage
   attr_reader :seats_sum, :seats, :type
 
@@ -7,6 +9,7 @@ class PassengerCarriage < Carriage
     @type = :passenger
     @seats_sum = seats_sum
     @seats = seats_sum
+    validate!
   end
 
   def take_a_seat
