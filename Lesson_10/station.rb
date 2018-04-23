@@ -12,9 +12,9 @@ class Station
 
   VALID_NAME = /.{3,}/i
 
-  validate :name, :presence
-  validate :name, :format, VALID_NAME
-  validate :name, :type, String
+  validate :name, :validate_presence
+  validate :name, :validate_format, VALID_NAME
+  validate :name, :validate_type, String
 
   strong_attr_accessor :trains, Array
   attr_accessor_with_history :name

@@ -8,8 +8,8 @@ class CargoTrain < Train
 
   NUMBER_FORMAT = /^(\d|[a-z]){3}-?(\d|[a-z]){2}$/i
 
-  validate :number, :presence
-  validate :number, :format, NUMBER_FORMAT
+  validate :number, :validate_presence
+  validate :number, :validate_format, NUMBER_FORMAT
 
   def initialize(number)
     @type = :cargo

@@ -5,6 +5,12 @@ require_relative 'validation'
 class PassengerCarriage < Carriage
   attr_reader :seats_sum, :seats, :type
 
+  include Validation
+
+  validate :name, :validate_presence
+  validate :seats_sum, :validate_type, Integer
+  validate :seats, :validate_type, Integer
+
   def initialize(seats_sum)
     @type = :passenger
     @seats_sum = seats_sum
