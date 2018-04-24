@@ -7,9 +7,8 @@ class PassengerCarriage < Carriage
 
   include Validation
 
-  validate :name, :validate_presence
+  validate :seats_sum, :validate_presence
   validate :seats_sum, :validate_type, Integer
-  validate :seats, :validate_type, Integer
 
   def initialize(seats_sum)
     @type = :passenger

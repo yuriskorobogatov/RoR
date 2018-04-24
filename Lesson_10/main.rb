@@ -253,13 +253,13 @@ class Main
 
   def create_passenger_wagons
     puts 'Введите количество пассажирских мест в вагоне:'
-    seats_sum = gets.chomp.to_i
+    seats_sum = gets.chomp
     PassengerCarriage.new(seats_sum)
   end
 
   def create_cargo_wagons
     puts 'Введите количество  грузомест в вагоне:'
-    sum_capacity = gets.chomp.to_i
+    sum_capacity = gets.chomp
     CargoCarriage.new(sum_capacity)
   end
 
